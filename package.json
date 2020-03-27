@@ -1,0 +1,19 @@
+{
+  "name": "sl-covid19-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Manthila Mallawa",
+  "license": "ISC",
+  "dependencies": {
+    "@keyv/sqlite": "^2.0.2",
+    "express": "^4.17.1",
+    "keyv": "^4.0.0",
+    "request": "^2.88.2",
+    "socket.io": "^2.3.0",
+    "web-push": "^3.4.3"
+  }
+}
