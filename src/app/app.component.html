@@ -1,0 +1,211 @@
+<div class="row mt-3">
+  <div class="col">
+    <div class="card">
+      <ul class="list-group list-group-flush">
+        <div *ngIf="isOnline" >
+          <li  class="list-group-item d-flex justify-content-between align-items-center">
+             Data status mode
+            <span class="badge badge-success badge-pill ">real-time</span>
+          </li>
+          <li class="list-group-item text-center">
+            <div class="progress mb-1 mt-0">
+              <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+            </div>
+            
+            <small><i class="fas fa-check-circle"></i>  Data is up to date.</small>
+            <br><small class="text-muted" *ngIf="data">Updated on {{data.update_date_time | date:'short'}}</small>
+            
+          </li>
+        </div>
+        <div *ngIf="!isOnline" >
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Data status mode
+            <i class="fa fa-circle-o-notch fa-spin"></i>
+            <span class="badge badge-warning badge-pill">offline</span>
+          </li>
+          <li *ngIf="!data" class="list-group-item text-center">
+            <div class="mb-3"> 
+              <i class="fas fa-exclamation-triangle fa-3x"></i>
+            </div>
+            <span>Couldn't fetch data. are you online?</span>
+          </li>
+          <li *ngIf="data" class="list-group-item text-center">
+            <div class="progress mb-1 mt-0">
+              <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+            </div>
+            <small><i class="fas fa-exclamation-circle"></i>  Data may not be accurate.</small>
+            <br><small class="text-muted" *ngIf="data">Updated on {{data.update_date_time | date:'short'}}</small>
+          </li>
+        </div>
+     
+      </ul>
+    </div>
+  </div>
+</div>
+<div *ngIf="data">
+
+  <div class="row mb-4">
+    <div class="col">
+      <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Global status ?
+          <label class="custom-toggle">
+            <input type="checkbox" (change)="checkValue($event)">
+            <span class="custom-toggle-slider text-danger rounded-circle" data-label-off="No" data-label-on="Yes"></span>
+        </label>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+            <div class="card card-stats">
+                <!-- New cases card -->
+                <div class="card-body"> 
+                    <div class="row">
+                        <div class="col">
+                            <h5 class="card-title text-uppercase mb-0">Total infected</h5>
+                            <h6 *ngIf="!isGlobal" class="card-subtitle text-muted mt-1"><i class="fas fa-map-marker-alt"></i> Sri Lanka</h6>
+                            <h6 *ngIf="isGlobal" class="card-subtitle text-muted mt-1"><i class="fas fa-globe-americas"></i> Global</h6>
+                            <span *ngIf="isGlobal" class="display-3 font-weight-bold mt-1 mb-0">{{data.global_total_cases | number }}</span>
+                            <span *ngIf="!isGlobal" class="display-3 font-weight-bold mt-1 mb-0">{{data.local_total_cases | number }}</span>
+                        </div>
+                        <div class="col-auto">
+                        <div class="icon icon-shape bg-orange text-white rounded-circle shadow">
+                          <i class="fas fa-procedures"></i>
+                        </div>
+                        </div>
+                    </div>
+                    <p class="mt-1 mb-0 text-sm">
+                          <span *ngIf="isGlobal && data.global_new_cases > 0" class="text-danger"><i class="fas fa-arrow-up"></i><strong> {{data.global_new_cases | number }}</strong></span>
+                          <span *ngIf="isGlobal && data.global_new_cases === 0" class="text-nowrap"> No new cases reported so far.</span>
+                          <span *ngIf="isGlobal && data.global_new_cases > 0" class="text-nowrap"> New cases. Increase of </span>
+                          <span *ngIf="isGlobal && data.global_new_cases > 0" class="text-warning mr-2"><strong> {{(data.global_new_cases / data.global_total_cases) * 100 | number }}%</strong></span>
+                          
+                          <span *ngIf="!isGlobal && data.local_new_cases > 0" class="text-danger"><i class="fas fa-arrow-up"></i><strong> {{data.local_new_cases | number }}</strong></span>
+                          <span *ngIf="!isGlobal && data.local_new_cases === 0" class="text-nowrap"> No new cases reported so far.</span>
+                          <span *ngIf="!isGlobal && data.local_new_cases > 0" class="text-nowrap"> New cases. Increase of </span>
+                          <span *ngIf="!isGlobal && data.local_new_cases > 0" class="text-warning mr-2"><strong> {{(data.local_new_cases / data.local_total_cases) * 100 | number }}%</strong></span> 
+                    </p>
+                    
+             
+                </div>
+            </div>
+  
+            
+    </div>
+  </div>
+
+  <div class="row">
+ 
+    <div class="col">
+      <div class="card card-stats">
+          <!-- Death cases card -->
+          <div class="card-body text-center"> 
+              <div class="row">
+                  <div class="col">
+                      <div class="icon icon-shape bg-danger text-white rounded-circle shadow mb-2">
+                          <i class="fas fa-user-alt-slash"></i>
+                      </div>
+                      <h5 class="card-title text-uppercase text-muted mb-0">Deaths</h5>
+                      <span *ngIf="isGlobal" class="display-3 font-weight-bold mb-0">{{data.global_deaths | number }}</span>
+                      <span *ngIf="!isGlobal" class="display-3 font-weight-bold mb-0">{{data.local_deaths | number }}</span>
+
+                  </div>
+              </div>
+              
+          </div>
+      </div>
+  </div>
+  <div class="col">
+    <div class="card card-stats">
+        <!-- Discharged cases card -->
+        <div class="card-body text-center"> 
+            <div class="row">
+                <div class="col">
+                    <div class="icon icon-shape bg-success text-white rounded-circle shadow mb-2">
+                        <i class="fas fa-hand-holding-heart"></i>
+                    </div>
+                    <h5 class="card-title text-uppercase text-muted mb-0">Discharged</h5>
+                    <span *ngIf="isGlobal" class="display-3 font-weight-bold mb-0">{{data.global_recovered | number }}</span>
+                    <span *ngIf="!isGlobal" class="display-3 font-weight-bold mb-0">{{data.local_recovered | number }}</span>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+  </div>
+  <div *ngIf="!isGlobal" class="row">
+    <div class="col">
+      <div class="card card-stats">
+        <!-- Suspicious cases card -->
+        <div class="card-body"> 
+            <div class="row">
+                <div class="col">
+                    <h5 class="card-title text-uppercase text-muted mb-0">under observation</h5>
+                    <span class="display-3 font-weight-bold mb-0">{{data.local_total_number_of_individuals_in_hospitals | number }}</span>
+                </div>
+                <div class="col-auto">
+                <div class="icon icon-shape bg-info text-white rounded-circle shadow">
+                  <i class="fas fa-stethoscope"></i>
+                </div>
+                </div>
+            </div>
+            <p class="mt-1 mb-0 text-sm">
+              <span>Total number of individuals in hospitals.</span>
+            </p>
+            
+        </div>
+    </div>
+    </div>
+  </div>
+
+  <div *ngIf="isOnline" class="row">
+    <div class="col">
+      <div class="card text-center">
+        <div class="card-body">
+          <p class="card-title text-uppercase h5"><i class="fas fa-bullhorn"></i> Live notifications</p>
+          <div *ngIf="isSubscribed">
+            <button (click)="unSubscribeFormNotifications()" class="btn btn-icon btn-danger mb-2" type="button">
+              <span class="btn-inner--icon"><i class="fas fa-bell-slash"></i></span>
+              <span class="btn-inner--text text-uppercase">Unsubscribe</span>
+            </button><br>
+            <span class="text-muted text-sm">Live notifications are enabled.</span>
+          </div>
+          <div *ngIf="!isSubscribed">
+            <button (click)="subscribeToNotifications()" class="btn btn-icon btn-default mb-2" type="button">
+              <span class="btn-inner--icon"><i class="fas fa-bell"></i></span>
+              <span class="btn-inner--text text-uppercase">Notify me</span>
+            </button><br>
+            <span class="text-muted text-sm">Get notified about latest COVID-19 cases in Sri Lanka.</span>
+          </div>
+          
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <div class="card text-center">
+        <div class="card-body">
+          <h4 class="card-title">Developed by</h4>
+          <a href="https://facebook.com/manthila.mallawa" class="avatar rounded-circle mr-3">
+            <img alt="View profile" src="/assets/img/brand/FB_IMG_1585031504968.jpg">
+          </a>
+          <p><strong>Manthila Mallawa</strong></p>
+          <p>with <a href="https://angular.io"><i class="fab fa-angular text-danger"></i></a></p>
+          <a href="https://facebook.com/manthila.mallawa" class="card-link"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://twitter.com/MallawaManthila" class="card-link"><i class="fab fa-twitter"></i></a>
+          <a href="https://github.com/MaNaHyper" class="card-link"><i class="fab fa-github-alt"></i></a>
+          <a href="https://www.linkedin.com/in/manthila-mallawa" class="card-link"><i class="fab fa-linkedin-in"></i> </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
